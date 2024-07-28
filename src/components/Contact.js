@@ -26,24 +26,42 @@ export const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setButtonText("Sending...");
-    let response = await fetch("/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify(formDetails),
-    });
-    setButtonText("Send");
-    console.log(response);
-    let result = await response.json();
-    setFormDetails(formInitialDetails);
-
-    if (result.code == 200) {
-      setStatus({ succes: true, message: 'Message sent successfully'});
-    } else {
-      setStatus({ succes: false, message: 'Something went wrong, please try again later.'});
+  
+    try {
+      let response = await fetch("/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify(formDetails),
+      });
+  
+      setButtonText("Send");
+  
+      if (!response.ok) {
+        // If the response is not OK, read the response as text and log it
+        let text = await response.text();
+        console.error('Response text:', text);
+        throw new Error('Network response was not ok');
+      }
+  
+      // Try to parse the response as JSON
+      let result = await response.json();
+      setFormDetails(formInitialDetails);
+  
+      if (result.code === 200) {
+        setStatus({ success: true, message: 'Message sent successfully' });
+      } else {
+        setStatus({ success: false, message: 'Something went wrong, please try again later.' });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+  
+      // If an error occurs, set the status to indicate failure
+      setStatus({ success: false, message: 'Something went wrong, please try again later.' });
     }
   };
+  
 
   return (
     <section className="contact" id="connect">
