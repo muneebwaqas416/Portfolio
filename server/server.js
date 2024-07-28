@@ -3,6 +3,7 @@ const router = express.Router();
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 require("dotenv").config()
+const path = require('path')
 
 // server used to send send emails
 const app = express();
@@ -29,8 +30,6 @@ contactEmail.verify((error) => {
   }
 });
 
-
-
 router.post("/contact", (req, res) => {
   const name = req.body.firstName + req.body.lastName;
   const email = req.body.email;
@@ -54,15 +53,13 @@ router.post("/contact", (req, res) => {
   });
 });
 
-app.get("/api" , (req,res)=>[
+app.get("/" , (req,res)=>{
+  console.log("in it")
     res.json({message : "Hello from server"})
-])
-
+})
 
 app.get('*' , (req,res)=>{
   res.sendFile(path.resolve(__dirname , '../build' , 'index.html'))
 })
-
-
 
 app.listen(3001, () => console.log("Server Running"));
