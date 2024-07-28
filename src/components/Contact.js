@@ -37,6 +37,7 @@ export const Contact = () => {
     console.log(response);
     let result = await response.json();
     setFormDetails(formInitialDetails);
+
     if (result.code == 200) {
       setStatus({ succes: true, message: 'Message sent successfully'});
     } else {
@@ -81,7 +82,7 @@ export const Contact = () => {
                     {
                       status.message &&
                       <Col>
-                        <p className={status.success === false ? "danger" : "success"}>{status.message}</p>
+                        <p className={status.success === false ? "danger" : "success"}>{JSON.stringify(status.message)}</p>
                       </Col>
                     }
                   </Row>
